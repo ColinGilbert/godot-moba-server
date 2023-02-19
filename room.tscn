@@ -9,3 +9,9 @@ size = Vector2( 2, 2 )
 own_world = true
 world = SubResource( 1 )
 script = ExtResource( 1 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 15.0
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

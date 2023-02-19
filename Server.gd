@@ -57,9 +57,19 @@ remote func update_clients(room_id):
 	var r = $rooms.get_node_or_null(str(room_id))
 	if r != null:
 			if client_id in get_tree().get_network_connected_peers():
-				print("Sending client list for room " + str(room_id) + " to client " + str(client_id))
+				#print("Sending client list for room " + str(room_id) + " to client " + str(client_id))
 				rpc_id(client_id, "updated_clients", r.client_list)
 			else:
-				print("Tried sending updated room to nonexistent client.")
+				pass
+				#print("Tried sending updated room to nonexistent client.")
 	else:
 		print("Couldn't find room " + str(room_id))
+
+remote func exit_room(room_id):
+	var client_id = get_tree().get_rpc_sender_id()
+	var r = $rooms.get_node_or_null(str(room_id))
+	r.remove_client(client_id)
+
+remote func update_rooms():
+	var client_id = get_tree().get_rpc_sender_id()
+	rpc_id(client_id, "updated_rooms", $rooms.rooms_list)

@@ -1,5 +1,7 @@
 extends Node
 
+onready var rooms = get_parent().get_parent().get_node("rooms")
+
 var client_info = {
 	"name": null,
 	"room_id": null,
@@ -7,4 +9,7 @@ var client_info = {
 }
 
 func terminate():
-	pass
+	var r = rooms.get_node_or_null(str(client_info["room_id"]))
+	if r != null:
+		r.remove_client(self.name)
+#		self.queue_free()
