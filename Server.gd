@@ -73,3 +73,21 @@ remote func exit_room(room_id):
 remote func update_rooms():
 	var client_id = get_tree().get_rpc_sender_id()
 	rpc_id(client_id, "updated_rooms", $rooms.rooms_list)
+
+remote func request_enter(room_id):
+	var client_id = get_tree().get_rpc_sender_id()
+	var r = $rooms.get_node_or_null(room_id)
+	if r != null:
+		if r.game_started == false and r.player_count < r.MAX_PLAYERS and client_id in get_tree().get_network_connected_peers():
+			rpc_id(client_id, "enter_room", room_id)
+		else:
+			print("Game started or room full.") # TODO: Send warning to player
+	else:
+		print("Room doesn't exist.")
+
+remote func switch_team(room_id):
+	var client_id = get_tree().get_rpc_sender_id()
+	var r = $rooms.get_node_or_null(str(room_id))
+	if r != null:
+		if client_id in get_tree().get_network_connected_peers():
+			r.switch_team(client_id)
